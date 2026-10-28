@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Service Engineer | Mock Interview</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <a class="brand" href="#" aria-label="Interview simulator home">
+            <span class="brand-icon">IT</span>
+            <span>Interview<span class="brand-light">Simulator</span></span>
+        </a>
+
+        <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode"
+                aria-pressed="false">
+                <span id="themeIcon" aria-hidden="true">🌙</span>
+                <span id="themeLabel">Dark mode</span>
+            </button>
+
+            <span class="header-label">PRACTICE SESSION</span>
+        </div>
+    </header>
+
+
+    <main class="container">
+        <section id="welcomeScreen" class="welcome-card">
+            <div class="eyebrow">YOUR CAREER STARTS HERE</div>
+            <h1>Practice like it's<br><span>the real interview.</span></h1>
+            <p class="intro">
+                Prepare for your IT Service Engineer interview with a voice-enabled
+                interviewer, realistic questions, and recorded answers.
+            </p>
+
+            <div class="role-card">
+                <div class="role-icon">🎧</div>
+                <div>
+                    <strong>IT Service Engineer</strong>
+                    <p>Columbia Technologies, Inc. · Entry-level</p>
+                </div>
+            </div>
+
+            <label for="candidateName">Your full name</label>
+            <input id="candidateName" type="text" placeholder="Enter your name" autocomplete="name">
+
+            <div class="session-info">
+                <div><strong>15</strong><span>Questions</span></div>
+                <div><strong>20–30</strong><span>Minutes</span></div>
+                <div><strong>3</strong><span>Interview rounds</span></div>
+            </div>
+
+            <button id="startBtn" class="primary-btn">
+                Start interview <span>→</span>
+            </button>
+            <p class="small-note">
+                Find a quiet place. Your microphone will be used to record your answers.
+            </p>
+        </section>
+
+        <section id="interviewScreen" class="interview-layout" hidden>
+            <div class="interview-heading">
+                <div>
+                    <div class="eyebrow" id="roundLabel">ROUND 1 · HR SCREENING</div>
+                    <h1>You're in the interview.</h1>
+                    <p id="greetingText">Please answer naturally and professionally.</p>
+                </div>
+                <div class="timer-card">
+                    <span>ELAPSED TIME</span>
+                    <strong id="elapsedTime">00:00</strong>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span id="progressText">Question 1 of 15</span>
+                    <span id="progressPercent">7%</span>
+                </div>
+                <div class="progress-track">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+            </div>
+
+            <article class="interviewer-card">
+                <div class="interviewer-header">
+                    <div class="avatar">HR</div>
+                    <div class="interviewer-identity">
+                        <strong>Recruitment Interviewer</strong>
+                        <span>Columbia Technologies, Inc. · Simulation</span>
+                    </div>
+                    <span id="speakerStatus" class="status-pill">READY</span>
+                </div>
+
+                <div class="question-area">
+                    <span id="questionCategory" class="question-category">INTRODUCTION</span>
+                    <h2 id="questionText">Please introduce yourself.</h2>
+                    <p id="questionHint" class="question-hint">
+                        Take a moment to organize your thoughts before answering.
+                    </p>
+                </div>
+
+                <div class="speech-controls">
+                    <button id="replayQuestionBtn" class="secondary-btn">
+                        <span>🔊</span> Repeat question
+                    </button>
+                    <button id="stopSpeechBtn" class="text-btn">Stop voice</button>
+                </div>
+            </article>
+
+            <section class="answer-card">
+                <div class="answer-header">
+                    <div>
+                        <h3>Your response</h3>
+                        <p>Speak clearly, as you would in a real interview.</p>
+                    </div>
+                    <div id="recordingStatus" class="recording-status">
+                        <span class="status-dot"></span>
+                        <span id="recordingStatusText">Not recording</span>
+                    </div>
+                </div>
+
+                <div class="recording-panel">
+                    <div id="micIcon" class="mic-icon">🎙️</div>
+                    <strong id="recordingTitle">Ready when you are</strong>
+                    <p id="recordingDescription">
+                        Press the button below and answer in your own words.
+                    </p>
+                    <div id="recordingTimer" class="recording-timer">00:00</div>
+                    <div id="audioPlayerContainer" class="audio-player" hidden>
+                        <audio id="answerAudio" controls></audio>
+                        <button id="downloadAnswerBtn" class="text-btn">Download answer</button>
+                    </div>
+                </div>
+
+                <div class="recording-actions">
+                    <button id="recordBtn" class="record-btn">
+                        <span class="record-circle"></span>
+                        Start recording
+                    </button>
+                    <button id="stopRecordBtn" class="secondary-btn" disabled>
+                        Stop recording
+                    </button>
+                </div>
+
+                <p id="recordingMessage" class="message" aria-live="polite"></p>
+
+                <div class="interview-navigation">
+                    <button id="previousBtn" class="secondary-btn" disabled>
+                        ← Previous
+                    </button>
+                    <button id="nextBtn" class="primary-btn" disabled>
+                        Next question →
+                    </button>
+                </div>
+                <p class="small-note navigation-note">
+                    Record and stop your answer before moving to the next question.
+                    You can also skip a question.
+                </p>
+                <button id="skipBtn" class="text-btn skip-btn">Skip this question</button>
+            </section>
+        </section>
+
+        <section id="resultsScreen" class="results-card" hidden>
+            <div class="results-icon">✓</div>
+            <div class="eyebrow">SESSION COMPLETED</div>
+            <h1>Interview finished.</h1>
+            <p id="resultsGreeting" class="intro"></p>
+
+            <div class="results-stats">
+                <div><strong id="completedCount">0</strong><span>Answered</span></div>
+                <div><strong id="skippedCount">0</strong><span>Skipped</span></div>
+                <div><strong id="totalTime">00:00</strong><span>Duration</span></div>
+            </div>
+
+            <h2 class="review-heading">Your answer recordings</h2>
+            <div id="reviewList" class="review-list"></div>
+
+            <div class="results-actions">
+                <button id="downloadSummaryBtn" class="primary-btn">
+                    Download interview summary
+                </button>
+                <button id="restartBtn" class="secondary-btn">
+                    Start a new interview
+                </button>
+            </div>
+            <p class="small-note">
+                Recordings remain in this browser session. Download any recordings you
+                want to keep before refreshing or closing the page.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>IT Interview Simulator · Practice, improve, succeed.</p>
+        <p>Independent practice tool — not an official company assessment.</p>
+    </footer>
+</body>
+
+</html>
