@@ -1,0 +1,190 @@
+/* 3D layer: loads after styles.css, changes nothing in your logic */
+
+#bg3d {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+#bg3d.ready {
+  opacity: 1;
+}
+
+/* Cards float over the scene and show it through a soft blur */
+.welcome-card,
+.results-card,
+.interviewer-card,
+.answer-card {
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Mouse-driven tilt (classes and variables are set by effects3d.js) */
+.tilt {
+  position: relative;
+  transform: perspective(1000px) translateZ(var(--lz, 0px)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+  will-change: transform;
+}
+
+.tilt:hover {
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
+}
+
+/* Moving light that follows the pointer */
+.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%),
+      rgba(255, 255, 255, 0.28), transparent 55%);
+  transition: opacity 0.25s;
+}
+
+.tilt:hover::after {
+  opacity: 1;
+}
+
+/* Depth layers: these sit in front of the card surface */
+.tilt .role-card,
+.tilt .session-info,
+.tilt .question-area,
+.tilt .recording-panel,
+.tilt .interviewer-header,
+.tilt .results-stats {
+  transform: translateZ(26px);
+  transform-style: preserve-3d;
+}
+
+.tilt .avatar,
+.tilt .mic-icon,
+.tilt .role-icon,
+.tilt .results-icon {
+  transform: translateZ(22px);
+  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.22);
+}
+
+/* The microphone spins slowly while you record */
+.mic-icon.recording {
+  animation: micSpin 2.4s linear infinite;
+}
+
+@keyframes micSpin {
+  from { transform: translateZ(22px) rotateY(0deg); }
+  to   { transform: translateZ(22px) rotateY(360deg); }
+}
+
+/* One entrance: the welcome card tips up into place */
+.welcome-card {
+  animation: tipUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes tipUp {
+  from {
+    opacity: 0;
+    transform: perspective(1100px) rotateX(22deg) translateY(40px) translateZ(-120px);
+  }
+}
+
+/* Buttons feel like physical keys */
+.primary-btn,
+.record-btn {
+  box-shadow: 0 4px 0 #1e3a8a, 0 10px 18px rgba(37, 99, 235, 0.28);
+}
+
+.record-btn {
+  box-shadow: 0 4px 0 #0b1535, 0 10px 18px rgba(23, 37, 84, 0.3);
+}
+
+html[data-theme="dark"] .primary-btn {
+  box-shadow: 0 4px 0 #1b3f7d, 0 10px 18px rgba(0, 0, 0, 0.4);
+}
+
+html[data-theme="dark"] .record-btn {
+  box-shadow: 0 4px 0 #14243f, 0 10px 18px rgba(0, 0, 0, 0.4);
+}
+
+.primary-btn:active:not(:disabled),
+.record-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #1e3a8a;
+}
+
+.primary-btn:disabled,
+.record-btn:disabled {
+  box-shadow: none;
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .tilt {
+    transform: none;
+  }
+
+  .welcome-card,
+  .mic-icon.recording {
+    animation: none;
+  }
+}
+
+/* Stronger hover: the card lifts toward you and its contents pop out */
+.tilt:hover {
+  --lz: 36px;
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.3), 0 0 0 1px var(--blue);
+}
+
+.tilt .role-card,
+.tilt .session-info,
+.tilt .question-area,
+.tilt .recording-panel,
+.tilt .interviewer-header,
+.tilt .results-stats,
+.tilt .avatar,
+.tilt .mic-icon,
+.tilt .role-icon,
+.tilt .results-icon {
+  transition: transform 0.25s ease-out;
+}
+
+.tilt:hover .role-card,
+.tilt:hover .session-info,
+.tilt:hover .question-area,
+.tilt:hover .recording-panel,
+.tilt:hover .interviewer-header,
+.tilt:hover .results-stats {
+  transform: translateZ(55px);
+}
+
+.tilt:hover .avatar,
+.tilt:hover .mic-icon,
+.tilt:hover .role-icon,
+.tilt:hover .results-icon {
+  transform: translateZ(80px);
+}
+
+/* Smooth light/dark switch: only active for a moment while the theme changes */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property: background-color, color, border-color, box-shadow,
+    outline-color, fill, stroke, opacity !important;
+  transition-duration: 0.6s !important;
+  transition-timing-function: ease-in-out !important;
+  transition-delay: 0s !important;
+}
+
+/* Keep the progress bar and canvas fade behaving normally */
+html.theme-transition .progress-bar {
+  transition-property: width, background-color !important;
+  transition-duration: 0.3s, 0.6s !important;
+}
