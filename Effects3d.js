@@ -1,7 +1,9 @@
 (() => {
   "use strict";
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
   const canHover = window.matchMedia("(hover: hover)").matches;
 
   /* ---------- 0. Smooth light/dark switch ---------- */
@@ -9,18 +11,25 @@
   let themeTimer = null;
   if (themeBtn) {
     // Capture phase: runs before the click handler in script.js changes the theme
-    themeBtn.addEventListener("click", () => {
-      const root = document.documentElement;
-      root.classList.add("theme-transition");
-      clearTimeout(themeTimer);
-      themeTimer = setTimeout(() => root.classList.remove("theme-transition"), 800);
-    }, true);
+    themeBtn.addEventListener(
+      "click",
+      () => {
+        const root = document.documentElement;
+        root.classList.add("theme-transition");
+        clearTimeout(themeTimer);
+        themeTimer = setTimeout(
+          () => root.classList.remove("theme-transition"),
+          800,
+        );
+      },
+      true,
+    );
   }
 
   /* ---------- 1. Card tilt ---------- */
   if (!reduceMotion && canHover) {
     const cards = document.querySelectorAll(
-      ".welcome-card, .interviewer-card, .answer-card, .results-card"
+      ".welcome-card, .interviewer-card, .answer-card, .results-card",
     );
 
     cards.forEach((card) => {
@@ -72,9 +81,11 @@
 
   /* ---------- 2. Three.js background scene ---------- */
   const script = document.createElement("script");
-  script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+  script.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
   script.onload = initScene;
-  script.onerror = () => console.warn("3D background skipped: Three.js did not load.");
+  script.onerror = () =>
+    console.warn("3D background skipped: Three.js did not load.");
   document.head.appendChild(script);
 
   function initScene() {
@@ -89,7 +100,11 @@
       "opacity:0;transition:opacity 1.4s ease;";
     document.body.prepend(canvas);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+    });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     const scene = new THREE.Scene();
@@ -107,30 +122,54 @@
 
     // Hero object: a glossy torus knot
     const knotMat = new THREE.MeshStandardMaterial({
-      color: 0x2563eb, metalness: 0.55, roughness: 0.22, transparent: true, opacity: 0.92
+      color: 0x2563eb,
+      metalness: 0.55,
+      roughness: 0.22,
+      transparent: true,
+      opacity: 0.92,
     });
-    const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.15, 0.34, 180, 28), knotMat);
+    const knot = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(1.15, 0.34, 180, 28),
+      knotMat,
+    );
 
     // Wireframe shell around it
     const shellMat = new THREE.MeshBasicMaterial({
-      color: 0x2563eb, wireframe: true, transparent: true, opacity: 0.18
+      color: 0x2563eb,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.18,
     });
-    const shell = new THREE.Mesh(new THREE.IcosahedronGeometry(2.1, 1), shellMat);
+    const shell = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(2.1, 1),
+      shellMat,
+    );
 
     const hero = new THREE.Group();
     hero.add(knot, shell);
     scene.add(hero);
 
     // Left side: ring, gem, wireframe cube and a glossy orb
-    const mk = (extra) => new THREE.MeshStandardMaterial(
-      Object.assign({ color: 0x2563eb, metalness: 0.55, roughness: 0.22 }, extra));
+    const mk = (extra) =>
+      new THREE.MeshStandardMaterial(
+        Object.assign(
+          { color: 0x2563eb, metalness: 0.55, roughness: 0.22 },
+          extra,
+        ),
+      );
     const ringMat = mk({});
     const gemMat = mk({ flatShading: true, roughness: 0.15 });
     const orbMat = mk({ roughness: 0.1 });
     const cubeMat = new THREE.MeshBasicMaterial({
-      color: 0x2563eb, wireframe: true, transparent: true, opacity: 0.35
+      color: 0x2563eb,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35,
     });
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.27, 24, 90), ringMat);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.9, 0.27, 24, 90),
+      ringMat,
+    );
     const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.85), gemMat);
     const cube = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.3, 1.3), cubeMat);
     const orb = new THREE.Mesh(new THREE.SphereGeometry(0.5, 40, 40), orbMat);
@@ -153,7 +192,10 @@
     const dotGeo = new THREE.BufferGeometry();
     dotGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
     const dotMat = new THREE.PointsMaterial({
-      color: 0x2563eb, size: 0.05, transparent: true, opacity: 0.55
+      color: 0x2563eb,
+      size: 0.05,
+      transparent: true,
+      opacity: 0.55,
     });
     const dots = new THREE.Points(dotGeo, dotMat);
     scene.add(dots);
@@ -185,7 +227,7 @@
     const palette = {
       light: new THREE.Color(0x2563eb),
       dark: new THREE.Color(0x7db0ff),
-      rec: new THREE.Color(0xdc2626)
+      rec: new THREE.Color(0xdc2626),
     };
     const current = new THREE.Color(0x2563eb);
     const speakerEl = document.getElementById("speakerStatus");
@@ -205,7 +247,11 @@
       const speaking = speakerEl && speakerEl.classList.contains("speaking");
       const dark = document.documentElement.dataset.theme === "dark";
 
-      const target = recording ? palette.rec : dark ? palette.dark : palette.light;
+      const target = recording
+        ? palette.rec
+        : dark
+          ? palette.dark
+          : palette.light;
       current.lerp(target, 0.06);
       knotMat.color.copy(current);
       shellMat.color.copy(current);
